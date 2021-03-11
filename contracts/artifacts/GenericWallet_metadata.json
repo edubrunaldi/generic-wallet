@@ -1,0 +1,409 @@
+{
+	"compiler": {
+		"version": "0.5.16+commit.9c3226ce"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "owner",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					}
+				],
+				"name": "ApplicationCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "application",
+						"type": "address"
+					}
+				],
+				"name": "Transfer",
+				"type": "event"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "balanceOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "balance",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "burn",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "expireTimeOf",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "expire",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expireGrantAccess",
+						"type": "uint256"
+					}
+				],
+				"name": "grantAccess",
+				"outputs": [],
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "grantedAccessOf",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "mint",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "description",
+						"type": "string"
+					},
+					{
+						"internalType": "bool",
+						"name": "grantAccessToOwner",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "expireGrantAccess",
+						"type": "uint256"
+					}
+				],
+				"name": "newApplication",
+				"outputs": [
+					{
+						"internalType": "contract GenericERC20",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"payable": true,
+				"stateMutability": "payable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "account",
+						"type": "address"
+					}
+				],
+				"name": "revokeAccess",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "totalSupply",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "total",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "sender",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "recipient",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "amount",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "transfer",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": false,
+				"inputs": [
+					{
+						"internalType": "address[]",
+						"name": "senders",
+						"type": "address[]"
+					},
+					{
+						"internalType": "address[]",
+						"name": "recipients",
+						"type": "address[]"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "amounts",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "transferBulk",
+				"outputs": [],
+				"payable": false,
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"localhost/contracts/GenereicWallet.sol": "GenericWallet"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/GSN/Context.sol": {
+			"keccak256": "0x90a3995645af7562d84b9d69363ffa5ae7217714ab61e951bf7bc450f40e4061",
+			"urls": [
+				"bzz-raw://216ef9d6b614db4eb46970b4e84903f2534a45572dd30a79f0041f1a5830f436",
+				"dweb:/ipfs/QmNPrJ4MWKUAWzKXpUqeyKRUfosaoANZAqXgvepdrCwZAG"
+			]
+		},
+		"@openzeppelin/contracts/math/SafeMath.sol": {
+			"keccak256": "0x640b6dee7a4b830bdfd52b5031a07fc2b12209f5b2e29e5d364a7d37f69d8076",
+			"urls": [
+				"bzz-raw://31113152e1ddb78fe7a4197f247591ca894e93f916867beb708d8e747b6cc74f",
+				"dweb:/ipfs/QmbZaJyXdpsYGykVhHH9qpVGQg9DGCxE2QufbCUy3daTgq"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/ERC20.sol": {
+			"keccak256": "0xf38098676e40a5197eb0dd7a9fea224b21ddea211e256ae9cc9a8aa17130cac1",
+			"urls": [
+				"bzz-raw://9725af553245887b58c364d0df9c3acde44ee5f25d5e4c6b02ecbce232ae0b86",
+				"dweb:/ipfs/QmXNVdqAzB5Ni6TTx2XZUXrgDh2KqKMySNMhCxkQkLPki2"
+			]
+		},
+		"@openzeppelin/contracts/token/ERC20/IERC20.sol": {
+			"keccak256": "0xe5bb0f57cff3e299f360052ba50f1ea0fff046df2be070b6943e0e3c3fdad8a9",
+			"urls": [
+				"bzz-raw://59fd025151435da35faa8093a5c7a17de02de9d08ad27275c5cdf05050820d91",
+				"dweb:/ipfs/QmQMvwEcPhoRXzbXyrdoeRtvLoifUW9Qh7Luho7bmUPRkc"
+			]
+		},
+		"localhost/contracts/GenereicWallet.sol": {
+			"keccak256": "0x435bda7113cddf87803ec82a698aab245d09ed1c4d040b2666f46fc6cf110540",
+			"urls": [
+				"bzz-raw://5f49d67a6e64be4a19a4959225999620467eb8dca888fac588e97f84a4501b06",
+				"dweb:/ipfs/Qmf2imXuvXzEKSWPNpqAcZhptEqTJe74F16FPzyUyabqiv"
+			]
+		},
+		"localhost/contracts/GenericERC20.sol": {
+			"keccak256": "0xdd84cd87606a6bbb2a6bc0ca5ba0d5a7707f58f8028a6af93d9dcf06b1908ac1",
+			"urls": [
+				"bzz-raw://1ffba3c6100a509b92bcb1637e8af2f172c5c262f2b624b5f6a3a860de1df0e8",
+				"dweb:/ipfs/QmW33rWPZfXYzLH79c7HC6fpEP8Je729Y2FAKB4y56dvVm"
+			]
+		}
+	},
+	"version": 1
+}
