@@ -385,10 +385,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0xb5df6b0b2c8222c5affbaa6037f21772d1e97858ad3d8fd9c458ebfddc1efd73",
+			"keccak256": "0xbfce0bdb88c23a4ed7991c4c88dddb51aaaf99c70d456e77cdbfccedfdf04cea",
 			"urls": [
-				"bzz-raw://b899be55dd941e99209661f0f9cd2f8f8d9fc3481e99baf80c5abd9cddf70e32",
-				"dweb:/ipfs/QmauQZNwuR5VyRwY7vR1JdtoMAM4cuzV6kkd9RYGNkRKe4"
+				"bzz-raw://de1ff0aabf8fe835f661baa913b1bf78bed95ff2165f09226a91f3181c6d27b1",
+				"dweb:/ipfs/QmPsYK4MZMcbSdDzZE1byaR8uEdAupaud62x2CJNerNsRs"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {

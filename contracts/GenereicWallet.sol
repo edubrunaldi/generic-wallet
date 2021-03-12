@@ -130,13 +130,13 @@ contract GenericWallet {
     }
     
     /**
-     * @dev Emitted when a new application with a `name` is create by a `owner`
+     * @dev Emitted when a new application with a `name` is create by a owner {appOwner}
      */
     event ApplicationCreated(address indexed appOwner, string name);
     
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
-     * another (`to`) from a especific {application}.
+     * another (`to`) from a especific application {appOwner}.
      *
      * Note that `value` may be zero.
      */

@@ -240,7 +240,6 @@ contract("GenericWallet", accounts => {
   });
 
   it("Transfer between 1 sender to 127 recipients should fail", async () => {
-    // await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountOne });
     const address = await newAddress();
     await gw.mint(address, aLotOfEther, accountOne, { from: accountOne });
     const senders = [];
