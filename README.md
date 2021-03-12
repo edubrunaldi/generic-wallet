@@ -97,7 +97,7 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 ---
 
 ### Events
-Every application has an ERC20 contract. Every transaction, mint, and burn the application's ERC20 will emit an event as usual.
+Every application has an ERC20 contract that emits the usual events..
 
 * `ApplicationCreated(address indexed appOwner, string name, GenericERC20 appERC20)`
     * Description: Emit when a new application is created with the owner (`appOwner`) of the application, the `name` of the application, and the ERC20 address of the application.
