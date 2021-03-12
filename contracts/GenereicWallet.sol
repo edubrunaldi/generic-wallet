@@ -20,7 +20,7 @@ contract GenericWallet {
         owner = msg.sender;
     }
     
-    modifier onlyApplicationOwned {
+    modifier onlyApplicationOwner {
         require(bytes(applications[msg.sender].name).length != 0, "Only Application Owner can call this function");
         _;
     }
@@ -37,8 +37,8 @@ contract GenericWallet {
         bool grantAccessToOwner, uint expireGrantAccess
     ) 
         public payable
-        returns (GenericERC20)
     {
+        require(bytes(applications[msg.sender].name).length == 0, "Address already have an application.");
         require(bytes(name).length != 0, "Parameter 'name' is empty");
 
         applications[msg.sender] = Application(name, description, new GenericERC20());
@@ -48,18 +48,16 @@ contract GenericWallet {
         
         receiveDeposit();
         emit ApplicationCreated(msg.sender, name);
-        return applications[msg.sender].appERC20;
     }
     
     
-    function grantAccess(address account, uint expireGrantAccess) public payable  onlyApplicationOwned {
-        applications[msg.sender].grantedAccounts[account] = true;
-        
+    function grantAccess(address account, uint expireGrantAccess) public onlyApplicationOwner {
         require(expireGrantAccess > now, "expireGrantAccess value is lower than now");
+        applications[msg.sender].grantedAccounts[account] = true;
         applications[msg.sender].accountsExpireTime[account] = expireGrantAccess;
     }
     
-    function revokeAccess(address account) public onlyApplicationOwned {
+    function revokeAccess(address account) public onlyApplicationOwner {
         applications[msg.sender].grantedAccounts[account] = false;
         applications[msg.sender].accountsExpireTime[account] = 0;
     }

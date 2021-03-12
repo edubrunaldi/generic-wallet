@@ -154,8 +154,8 @@
 				],
 				"name": "grantAccess",
 				"outputs": [],
-				"payable": true,
-				"stateMutability": "payable",
+				"payable": false,
+				"stateMutability": "nonpayable",
 				"type": "function"
 			},
 			{
@@ -234,13 +234,7 @@
 					}
 				],
 				"name": "newApplication",
-				"outputs": [
-					{
-						"internalType": "contract GenericERC20",
-						"name": "",
-						"type": "address"
-					}
-				],
+				"outputs": [],
 				"payable": true,
 				"stateMutability": "payable",
 				"type": "function"
@@ -391,10 +385,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0x435bda7113cddf87803ec82a698aab245d09ed1c4d040b2666f46fc6cf110540",
+			"keccak256": "0xd0c3305f88cac4fd130f8d53df6dd3d2b6811a25afe719d4640f2f5fafd0d4b5",
 			"urls": [
-				"bzz-raw://5f49d67a6e64be4a19a4959225999620467eb8dca888fac588e97f84a4501b06",
-				"dweb:/ipfs/Qmf2imXuvXzEKSWPNpqAcZhptEqTJe74F16FPzyUyabqiv"
+				"bzz-raw://f7cab287dc9d337231f11e880d68320c81298b25d1602248c15b76ea2b3572dc",
+				"dweb:/ipfs/QmSXN12pp68jjuix6psrHnLowgZnFCw7Q6RHy9aBG8zqfZ"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {
