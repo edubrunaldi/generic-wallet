@@ -29,6 +29,7 @@ contract("GenericWallet", accounts => {
 
   it("Should create a new Application.", async () => {
     const result = await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountZero });
+    console.log(result.logs);
     assert.equal(result.logs[1].event, "ApplicationCreated", "The log event create was not an  ApplicationCreated");
   });
 

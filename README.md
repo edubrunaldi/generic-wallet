@@ -46,45 +46,45 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 ---
 
 #### Interacting with your application
-* `mint(address account, uint256 amount, address appOwner) public onlyGrantedAccounts`
-    * Description: Generate `amount` to the `account` for an application (`appOwner`). This function increments the `totalSupply` from your application.
+* `mint(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
+    * Description: Generate `amount` to the `account` for an application (`ownerAddress`). This function increments the `totalSupply` from your application.
     * Requirements:
         * `account` must be different then `address(0)`
         * This function must be called by an account with granted access.
-* `burn(address account, uint256 amount, address appOwner) public onlyGrantedAccounts`
-    * Description: Remove `amount` to the `account` for an application (`appOwner`). This function decreases the total supply from your application.
+* `burn(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
+    * Description: Remove `amount` to the `account` for an application (`ownerAddress`). This function decreases the total supply from your application.
     * Requirements:
         * `account` must be different then `address(0)`
         * This function must be called by an account with granted access.
-* `transfer(address sender, address recipient, uint256 amount, address appOwner) public onlyGrantedAccounts`
-    * Description: Transfer `amount` from `sender` to `recipient` for an application (`appOwner`).
+* `transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
+    * Description: Transfer `amount` from `sender` to `recipient` for an application (`ownerAddress`).
     * Requirements:
         * Both `sender` and `recipient` must be different from `address(0)`.
         * This function must be called by an account with granted access.
-* `transferBulk( address[] memory senders, address[] memory recipients, uint256[] memory amounts, address appOwner) public  onlyGrantedAccounts`
+* `transferBulk( address[] memory senders, address[] memory recipients, uint256[] memory amounts, address ownerAddress) public  onlyGrantedAccounts`
     * Description: Create 1 to 126 (inclusive) transactions in one request. Be aware that you can pay an expensive gas transaction with it.
     * Requirements:
         * Every address on `senders` and on `recipients` must be different from `address(0)`.
         * The size of `senders`, `recipients`, and `amounts` must be the same.
         * the size of `senders`, `recipients`, and `amounts` must be lower then 127;
-* `balanceOf(address account, address appOwner) public view returns (uint256 balance) `
-    * Description: Return the balance of and `account` from an application (`appOwner`)
-* `totalSupply(address appOwner) public view returns (uint256 total)`
-    * Description: Return the total of supply from an application (`appOwner`)
+* `balanceOf(address account, address ownerAddress) public view returns (uint256 balance) `
+    * Description: Return the balance of and `account` from an application (`ownerAddress`)
+* `totalSupply(address ownerAddress) public view returns (uint256 total)`
+    * Description: Return the total of supply from an application (`ownerAddress`)
 
-* `expireTimeOf(address account, address appOwner) public view returns (uint expire) `
-    * Description: Return the expirationTime from an granted account from an application (`appOwner`)
-* `grantedAccessOf(address account, address appOwner) public view returns (bool)`
-    * Description: Return if an account is granted for an application (`appOwner`)
-    grantedAccessOf(address account, address appOwner) public view returns (bool)
+* `expireTimeOf(address account, address ownerAddress) public view returns (uint expire) `
+    * Description: Return the expirationTime from an granted account from an application (`ownerAddress`)
+* `grantedAccessOf(address account, address ownerAddress) public view returns (bool)`
+    * Description: Return if an account is granted for an application (`ownerAddress`)
+    grantedAccessOf(address account, address ownerAddress) public view returns (bool)
 ---
 
 ### Events
 
-* `ApplicationCreated(address indexed appOwner, string name)`
-    * Description: Emit when a new application is created with the owner (`appOwner`) of the application and the `name` of the application.
+* `ApplicationCreated(address indexed ownerAddress, string name)`
+    * Description: Emit when a new application is created with the owner (`ownerAddress`) of the application and the `name` of the application.
 * `Transfer(address indexed from, address indexed to, uint256 value, address indexed application)`
-    * Description: Almost equal to the ERC20 Transaction. This Transaction event emits every new transaction with the sender (`from`), the recipient (`to`), the `value`, and an additional parameter to know the application (`appOwner`).
+    * Description: Almost equal to the ERC20 Transaction. This Transaction event emits every new transaction with the sender (`from`), the recipient (`to`), the `value`, and an additional parameter to know the application (`ownerAddress`).
 
 ## TODO
 

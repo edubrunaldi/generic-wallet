@@ -39,9 +39,9 @@ contract GenericWallet {
         _;
     }
     
-    modifier onlyGrantedAccounts(address appOwner) {
-        require(bool(applications[appOwner].grantedAccounts[msg.sender]) == true, "Only granted accounts can call this function.");
-        require(applications[appOwner].accountsExpirationDate[msg.sender] >= now,"Expired access account.");
+    modifier onlyGrantedAccounts(address ownerAddress) {
+        require(bool(applications[ownerAddress].grantedAccounts[msg.sender]) == true, "Only granted accounts can call this function.");
+        require(applications[ownerAddress].accountsExpirationDate[msg.sender] >= now,"Expired access account.");
         _;
     }
 
@@ -116,23 +116,23 @@ contract GenericWallet {
     
     /** 
      * @dev Creates `amount` tokens and assigns them to `account`, increasing
-     * the total supply for an especific application `appOwner`.
+     * the total supply for an especific application `ownerAddress`.
      *
-     * Emits a {Tansfer} event on ERC20 contract for `appOwner` application with `from` set to the zero address.
+     * Emits a {Tansfer} event on ERC20 contract for `ownerAddress` application with `from` set to the zero address.
      * 
      * Requirements
      * - `account` cannot be the zero address.
      * -  only accounts with grant access can call this function
      */
-    function mint(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
-        applications[appOwner].appERC20.mint(account, amount);
+    function mint(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
+        applications[ownerAddress].appERC20.mint(account, amount);
     }
     
     /**
      * @dev Destroys `amount` tokens from `account`, reducing the
      * total supply.
      *
-     * Emits a {Transfer} event on ERC20 contract for `appOwner` application with `to` set to the zero address.
+     * Emits a {Transfer} event on ERC20 contract for `ownerAddress` application with `to` set to the zero address.
      *
      * Requirements
      *
@@ -140,8 +140,8 @@ contract GenericWallet {
      * - `account` must have at least `amount` tokens.
      * -  only accounts with grant access can call this function
      */
-    function burn(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
-        applications[appOwner].appERC20.burn(account, amount);
+    function burn(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
+        applications[ownerAddress].appERC20.burn(account, amount);
     }
 
      /**
@@ -155,8 +155,8 @@ contract GenericWallet {
      * - `recipient` cannot be the zero address.
      * - `sender` must have a balance of at least `amount`.
      */
-    function transfer(address sender, address recipient, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
-        applications[appOwner].appERC20.transfer(sender, recipient, amount);
+    function transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
+        applications[ownerAddress].appERC20.transfer(sender, recipient, amount);
     }
     
     
@@ -175,10 +175,10 @@ contract GenericWallet {
         address[] memory senders,
         address[] memory recipients,
         uint256[] memory amounts,
-        address appOwner
+        address ownerAddress
     ) 
         public 
-        onlyGrantedAccounts(appOwner)
+        onlyGrantedAccounts(ownerAddress)
     {
         require(
             recipients.length == amounts.length &&
@@ -194,44 +194,44 @@ contract GenericWallet {
 
         uint8 i = 0;
         while(i < senders.length) {
-            applications[appOwner].appERC20.transfer(senders[i], recipients[i], amounts[i]);
+            applications[ownerAddress].appERC20.transfer(senders[i], recipients[i], amounts[i]);
             i++;
         }
     }
     
     /**
-     * @dev Returns the amount of tokens owned by `account` for application `appOwner`.
+     * @dev Returns the amount of tokens owned by `account` for application `ownerAddress`.
      */ 
-    function balanceOf(address account, address appOwner) public view returns (uint256 balance) {
-        return applications[appOwner].appERC20.balanceOf(account);
+    function balanceOf(address account, address ownerAddress) public view returns (uint256 balance) {
+        return applications[ownerAddress].appERC20.balanceOf(account);
     }
     
     /**
-     * @dev Returns the total supply from a application `appOwner`
+     * @dev Returns the total supply from a application `ownerAddress`
      */
-    function totalSupply(address appOwner) public view returns (uint256 total)  { 
-        return applications[appOwner].appERC20.totalSupply();
+    function totalSupply(address ownerAddress) public view returns (uint256 total)  { 
+        return applications[ownerAddress].appERC20.totalSupply();
     }
     
     /**
-     * @dev Returns the expirateDate of an account from an application `appOwner`
+     * @dev Returns the expirateDate of an account from an application `ownerAddress`
      */
-    function expireTimeOf(address account, address appOwner) public view returns (uint expire) {
-        return applications[appOwner].accountsExpirationDate[account];
+    function expireTimeOf(address account, address ownerAddress) public view returns (uint expire) {
+        return applications[ownerAddress].accountsExpirationDate[account];
     }
     
     /**
-     * @dev Returns if an account is grated for an application `appOwner`
+     * @dev Returns if an account is grated for an application `ownerAddress`
      */ 
-    function grantedAccessOf(address account, address appOwner) public view returns (bool hasGrant) {
-        return applications[appOwner].grantedAccounts[account];
+    function grantedAccessOf(address account, address ownerAddress) public view returns (bool hasGrant) {
+        return applications[ownerAddress].grantedAccounts[account];
     }
     
     /**
-     * @dev return the ERC20 address of an application `appOwner`
+     * @dev return the ERC20 address of an application `ownerAddress`
      */ 
-    function erc20AddressOf(address appOwner) public view returns (GenericERC20 erc20Address) {
-        return applications[appOwner].appERC20;
+    function erc20AddressOf(address ownerAddress) public view returns (GenericERC20 erc20Address) {
+        return applications[ownerAddress].appERC20;
     }
 
     function receiveDeposit() private {
@@ -241,13 +241,13 @@ contract GenericWallet {
     }
     
     /**
-     * @dev Emitted when a new application with a `name` is create by a owner {appOwner}
+     * @dev Emitted when a new application with a `name` is create by the owner {ownerAddress}
      */
-    event ApplicationCreated(address indexed appOwner, string name, GenericERC20 appERC20);
+    event ApplicationCreated(address indexed ownerAddress, string name, GenericERC20 appERC20);
     
     /**
      * @dev Emitted when an account is grant or revoke in an application.
      */
-    event Privilege(address indexed account,string privilege, address indexed appOwner, uint expirationDate);
+    event Privilege(address indexed account,string privilege, address indexed ownerAddress, uint expirationDate);
 
 }
