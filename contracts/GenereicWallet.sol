@@ -25,7 +25,7 @@ contract GenericWallet {
         _;
     }
     
-    modifier _onlyGrantedAccounts(address appOwner) {
+    modifier onlyGrantedAccounts(address appOwner) {
         require(bool(applications[appOwner].grantedAccounts[msg.sender]) == true, "Only granted accounts can call this function.");
         require(applications[appOwner].accountsExpireTime[msg.sender] >= now,"Expired access account.");
         _;
@@ -63,17 +63,17 @@ contract GenericWallet {
     }
     
     
-    function mint(address account, uint256 amount, address appOwner) public _onlyGrantedAccounts(appOwner) {
+    function mint(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.mint(account, amount);
         emit Transfer(address(0), account, amount, appOwner);
     }
     
-    function burn(address account, uint256 amount, address appOwner) public _onlyGrantedAccounts(appOwner) {
+    function burn(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.burn(account, amount);
         emit Transfer(account, address(0), amount, appOwner);
     }
     
-    function transfer(address sender, address recipient, uint256 amount, address appOwner) public _onlyGrantedAccounts(appOwner) {
+    function transfer(address sender, address recipient, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.transfer(sender, recipient, amount);
         emit Transfer(sender, recipient, amount, appOwner);
     }
@@ -85,7 +85,7 @@ contract GenericWallet {
         address appOwner
     ) 
         public 
-        _onlyGrantedAccounts(appOwner)
+        onlyGrantedAccounts(appOwner)
     {
         require(
             recipients.length == amounts.length &&
