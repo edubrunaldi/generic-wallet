@@ -3,12 +3,12 @@ pragma solidity >=0.4.21 <0.7.0;
 import './GenericERC20.sol';
 
 /**
- * This contract manage generic wallet applications. Every new application creates a new ERC20 Token.
- * The owner can grant/revoke acccount to manage his application.
+ * This contract manages generic wallet applications. Every new application creates a new ERC20 Token.
+ * The owner can grant/revoke to accounts to manage his application.
  * The owner and/or granted accounts can manage these tokens by 
  *   creating new token (mint)
  *   remove token (burn)
- *   tranfer token between accounts (transfer / transferBulk)
+ *   transfer token between accounts (transfer / transferBulk)
  */
 contract GenericWallet {
     address payable private owner;
@@ -50,14 +50,14 @@ contract GenericWallet {
      * 
      * @param name The name of the new application
      * @param description The description of the new application
-     * @param grantAccessToOwner Indicates if the owner (sender) want to have grant access to manage his application
+     * @param grantAccessToOwner Indicates if the owner (sender) wants to have grant access to manage his application
      * @param expirationDate Timestamp when the owner grant access will expire
      * 
-     * Emits an {ApplicationCreated} with appERC20 contaning the new ERC20 for this application
+     * Emits an {ApplicationCreated} with appERC20 containing the new ERC20 for this application
      * 
      * Requirements:
      *  This function require an address without an application in this contract
-     *  parameter name must be non-empty string
+     *  parameter name must be a non-empty string
      */
     function newApplication(
         string memory name,
@@ -241,7 +241,7 @@ contract GenericWallet {
     }
     
     /**
-     * @dev Emitted when a new application with a `name` is create by a owner {appOwner}
+     * @dev Emitted when a new application is created the ERC20 address for that application.
      */
     event ApplicationCreated(address indexed appOwner, string name, GenericERC20 appERC20);
     
