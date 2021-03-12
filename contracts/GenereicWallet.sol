@@ -22,7 +22,6 @@ contract GenericWallet {
 
     struct Application {
         string name;
-        string description;
         GenericERC20 appERC20;
         mapping(address => bool) grantedAccounts;
         mapping(address => uint) accountsExpirationDate;
@@ -49,11 +48,10 @@ contract GenericWallet {
      * Create a new application for the sender address
      * 
      * @param name The name of the new application
-     * @param description The description of the new application
      * @param grantAccessToOwner Indicates if the owner (sender) wants to have grant access to manage his application
      * @param expirationDate Timestamp when the owner grant access will expire
      * 
-     * Emits an {ApplicationCreated} with appERC20 containing the new ERC20 for this application
+     * Emits an { ApplicationCreated } event
      * 
      * Requirements:
      *  This function require an address without an application in this contract
@@ -61,7 +59,6 @@ contract GenericWallet {
      */
     function newApplication(
         string memory name,
-        string memory description,
         bool grantAccessToOwner, uint expirationDate
     ) 
         public payable
@@ -69,12 +66,12 @@ contract GenericWallet {
         require(bytes(applications[msg.sender].name).length == 0, "Address already have an application.");
         require(bytes(name).length != 0, "Parameter 'name' is empty");
 
-        applications[msg.sender] = Application(name, description, new GenericERC20());
+        applications[msg.sender] = Application(name, new GenericERC20());
         if (grantAccessToOwner) {
             grantAccess(msg.sender, expirationDate);
         }
         receiveDeposit();
-        emit ApplicationCreated(msg.sender, name, applications[msg.sender].appERC20);
+        emit ApplicationCreated(msg.sender, name);
     }
     
     /**
@@ -126,6 +123,7 @@ contract GenericWallet {
      */
     function mint(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
         applications[ownerAddress].appERC20.mint(account, amount);
+        emit Transfer(address(0), account, amount, ownerAddress);
     }
     
     /**
@@ -142,6 +140,7 @@ contract GenericWallet {
      */
     function burn(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
         applications[ownerAddress].appERC20.burn(account, amount);
+        emit Transfer(account, address(0), amount, ownerAddress);
     }
 
      /**
@@ -157,6 +156,7 @@ contract GenericWallet {
      */
     function transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts(ownerAddress) {
         applications[ownerAddress].appERC20.transfer(sender, recipient, amount);
+        emit Transfer(sender, recipient, amount, ownerAddress);
     }
     
     
@@ -195,6 +195,7 @@ contract GenericWallet {
         uint8 i = 0;
         while(i < senders.length) {
             applications[ownerAddress].appERC20.transfer(senders[i], recipients[i], amounts[i]);
+            emit Transfer(senders[i], recipients[i], amounts[i], ownerAddress);
             i++;
         }
     }
@@ -226,13 +227,6 @@ contract GenericWallet {
     function grantedAccessOf(address account, address ownerAddress) public view returns (bool hasGrant) {
         return applications[ownerAddress].grantedAccounts[account];
     }
-    
-    /**
-     * @dev return the ERC20 address of an application `ownerAddress`
-     */ 
-    function erc20AddressOf(address ownerAddress) public view returns (GenericERC20 erc20Address) {
-        return applications[ownerAddress].appERC20;
-    }
 
     function receiveDeposit() private {
         require(msg.value == PAYMENT_AMOUNT, "You must send 0.5 ether.");
@@ -243,11 +237,18 @@ contract GenericWallet {
     /**
      * @dev Emitted when a new application with a `name` is create by the owner {ownerAddress}
      */
-    event ApplicationCreated(address indexed ownerAddress, string name, GenericERC20 appERC20);
+    event ApplicationCreated(address indexed ownerAddress, string name);
     
     /**
      * @dev Emitted when an account is grant or revoke in an application.
      */
     event Privilege(address indexed account,string privilege, address indexed ownerAddress, uint expirationDate);
+    
+    /** @dev Emitted when `value` tokens are moved from one account (`from`) to
+     * another (`to`) in an especific application.
+     *
+     * Note that `value` may be zero.
+     */
+    event Transfer(address indexed from, address indexed to, uint256 value, address indexed ownerAddress);
 
 }

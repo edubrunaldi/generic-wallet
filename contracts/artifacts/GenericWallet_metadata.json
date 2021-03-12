@@ -25,12 +25,6 @@
 						"internalType": "string",
 						"name": "name",
 						"type": "string"
-					},
-					{
-						"indexed": false,
-						"internalType": "contract GenericERC20",
-						"name": "appERC20",
-						"type": "address"
 					}
 				],
 				"name": "ApplicationCreated",
@@ -65,6 +59,37 @@
 					}
 				],
 				"name": "Privilege",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "to",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "value",
+						"type": "uint256"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "ownerAddress",
+						"type": "address"
+					}
+				],
+				"name": "Transfer",
 				"type": "event"
 			},
 			{
@@ -116,27 +141,6 @@
 				"outputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"constant": true,
-				"inputs": [
-					{
-						"internalType": "address",
-						"name": "ownerAddress",
-						"type": "address"
-					}
-				],
-				"name": "erc20AddressOf",
-				"outputs": [
-					{
-						"internalType": "contract GenericERC20",
-						"name": "erc20Address",
-						"type": "address"
-					}
-				],
-				"payable": false,
-				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -242,11 +246,6 @@
 					{
 						"internalType": "string",
 						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "string",
-						"name": "description",
 						"type": "string"
 					},
 					{
@@ -371,9 +370,6 @@
 				"burn(address,uint256,address)": {
 					"details": "Destroys `amount` tokens from `account`, reducing the total supply.     * Emits a {Transfer} event on ERC20 contract for `ownerAddress` application with `to` set to the zero address.     * Requirements     * - `account` cannot be the zero address. - `account` must have at least `amount` tokens. -  only accounts with grant access can call this function"
 				},
-				"erc20AddressOf(address)": {
-					"details": "return the ERC20 address of an application `ownerAddress`"
-				},
 				"expireTimeOf(address,address)": {
 					"details": "Returns the expirateDate of an account from an application `ownerAddress`"
 				},
@@ -389,9 +385,8 @@
 				"mint(address,uint256,address)": {
 					"details": "Creates `amount` tokens and assigns them to `account`, increasing the total supply for an especific application `ownerAddress`.     * Emits a {Tansfer} event on ERC20 contract for `ownerAddress` application with `from` set to the zero address.      * Requirements - `account` cannot be the zero address. -  only accounts with grant access can call this function"
 				},
-				"newApplication(string,string,bool,uint256)": {
+				"newApplication(string,bool,uint256)": {
 					"params": {
-						"description": "The description of the new application",
 						"expirationDate": "Timestamp when the owner grant access will expire      * Emits an {ApplicationCreated} with appERC20 contaning the new ERC20 for this application      * Requirements: This function require an address without an application in this contract parameter name must be non-empty string",
 						"grantAccessToOwner": "Indicates if the owner (sender) want to have grant access to manage his application",
 						"name": "The name of the new application"
@@ -418,7 +413,7 @@
 				"grantAccess(address,uint256)": {
 					"notice": "Grant access for an account until  expireGrantAccessDate. Can be used to update the expireGrantAccessDate. "
 				},
-				"newApplication(string,string,bool,uint256)": {
+				"newApplication(string,bool,uint256)": {
 					"notice": "Create a new application for the sender address "
 				},
 				"revokeAccess(address)": {
@@ -470,10 +465,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0xa3bd9e78302d691e0b1be96ecb5d7d8f4c035553d22e40b41f3493a144dc9024",
+			"keccak256": "0x0814963bc3ffa8c74b9399ffd66f00e9ee4358317470b47b48733f64084c6254",
 			"urls": [
-				"bzz-raw://3d63b2de277ff572a756e719905feab5ee901bb011b14de03520e044ed81043e",
-				"dweb:/ipfs/QmUNADgdgkghekWhoCQdsCsuUaH6buhE74CEqx7ELusvK8"
+				"bzz-raw://28e5cdc584c464afd11279c04c380e66acb18bba02cd26b03d333e084ca15858",
+				"dweb:/ipfs/QmQfuhaipdjBcvcBz3qshNcP6GfYHrc8yTEpVunRzjHLwG"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {
