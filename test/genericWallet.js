@@ -16,6 +16,8 @@ contract("GenericWallet", accounts => {
   const sameLengthReasonExpected = "senders, recipients and amounts must have equals length.";
   const lengthBiggerThanReasonExpected = "senders, recipients must be lower than 127 address.";
   const addressWithApplicationReasonExpected = "Address already have an application.";
+  const granted = 'Granted';
+  const revoked = 'Revoked';
 
   beforeEach(async () => {
     gw = await GenericWallet.deployed();
@@ -27,7 +29,7 @@ contract("GenericWallet", accounts => {
 
   it("Should create a new Application.", async () => {
     const result = await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountZero });
-    assert.equal(result.logs[0].event, "ApplicationCreated", "The log event create was not an  ApplicationCreated");
+    assert.equal(result.logs[1].event, "ApplicationCreated", "The log event create was not an  ApplicationCreated");
   });
 
   it("Contract owner should receive 0.5 ether when a new application is created", async () => {
@@ -61,12 +63,25 @@ contract("GenericWallet", accounts => {
     assert.equal(grantedAccess, true, "Account without grant access");
   });
 
+  it("Application owner grant access to an account should create an event", async () => {
+    const address = await newAddress();
+    const result = await gw.grantAccess(address, 95617584000000, { from: accountOne });
+    assert.equal(result.logs[0].args.privilege, granted, "The log event create was not a granted privilege");
+  });
+
   it("Application owner revoke access to an account should success", async () => {
     const address = await newAddress();
     await gw.grantAccess(address, 95617584000000, { from: accountOne });
     await gw.revokeAccess(address, { from: accountOne });
     const grantedAccess = await gw.grantedAccessOf(address, accountOne, { from: accountOne });
     assert.equal(grantedAccess, false, "Account with grant access");
+  });
+
+  it("Application owner revoke access to an account should create an event", async () => {
+    const address = await newAddress();
+    await gw.grantAccess(address, 95617584000000, { from: accountOne });
+    const result = await gw.revokeAccess(address, { from: accountOne });
+    assert.equal(result.logs[0].args.privilege, revoked, "The log event create was not a revoked privilege");
   });
 
   it("Account no owner grant access to an account should fail", async () => {

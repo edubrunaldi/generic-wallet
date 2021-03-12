@@ -5,13 +5,20 @@ import './GenericERC20.sol';
 
 contract GenericWallet {
     address payable private owner;
+    
+    // strings used by Privalege event
+    string constant GRANTED = "Granted";
+    string constant REVOKED = "Revoked";
+
+    uint constant PAYMENT_AMOUNT = 500 finney;
+    uint8 constant MAX_BULK_TRANSFER = 126;
 
     struct Application {
         string name;
         string description;
         GenericERC20 appERC20;
         mapping(address => bool) grantedAccounts;
-        mapping(address => uint) accountsExpireTime;
+        mapping(address => uint) accountsExpirationDate;
     }
     
     mapping(address => Application) applications;
@@ -27,7 +34,7 @@ contract GenericWallet {
     
     modifier onlyGrantedAccounts(address appOwner) {
         require(bool(applications[appOwner].grantedAccounts[msg.sender]) == true, "Only granted accounts can call this function.");
-        require(applications[appOwner].accountsExpireTime[msg.sender] >= now,"Expired access account.");
+        require(applications[appOwner].accountsExpirationDate[msg.sender] >= now,"Expired access account.");
         _;
     }
     
@@ -45,37 +52,36 @@ contract GenericWallet {
         if (grantAccessToOwner) {
             grantAccess(msg.sender, expireGrantAccess);
         }
-        
         receiveDeposit();
-        emit ApplicationCreated(msg.sender, name);
+        emit ApplicationCreated(msg.sender, name, applications[msg.sender].appERC20);
     }
     
     
     function grantAccess(address account, uint expireGrantAccess) public onlyApplicationOwner {
         require(expireGrantAccess > now, "expireGrantAccess value is lower than now");
+
         applications[msg.sender].grantedAccounts[account] = true;
-        applications[msg.sender].accountsExpireTime[account] = expireGrantAccess;
+        applications[msg.sender].accountsExpirationDate[account] = expireGrantAccess;
+        emit Privilege(account, GRANTED, applications[msg.sender].accountsExpirationDate[account]);
     }
     
     function revokeAccess(address account) public onlyApplicationOwner {
         applications[msg.sender].grantedAccounts[account] = false;
-        applications[msg.sender].accountsExpireTime[account] = 0;
+        applications[msg.sender].accountsExpirationDate[account] = 0;
+        emit Privilege(account, REVOKED, applications[msg.sender].accountsExpirationDate[account]);
     }
     
     
     function mint(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.mint(account, amount);
-        emit Transfer(address(0), account, amount, appOwner);
     }
     
     function burn(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.burn(account, amount);
-        emit Transfer(account, address(0), amount, appOwner);
     }
     
     function transfer(address sender, address recipient, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.transfer(sender, recipient, amount);
-        emit Transfer(sender, recipient, amount, appOwner);
     }
     
     function transferBulk(
@@ -93,16 +99,15 @@ contract GenericWallet {
             "senders, recipients and amounts must have equals length."
         );
         require(
-            senders.length < 127 &&
-            recipients.length < 127 &&
-            amounts.length < 127,
+            senders.length <= MAX_BULK_TRANSFER &&
+            recipients.length <= MAX_BULK_TRANSFER &&
+            amounts.length <= MAX_BULK_TRANSFER,
             "senders, recipients must be lower than 127 address."
         );
 
         uint8 i = 0;
         while(i < senders.length) {
             applications[appOwner].appERC20.transfer(senders[i], recipients[i], amounts[i]);
-            emit Transfer(senders[i], recipients[i], amounts[i], appOwner);
             i++;
         }
     }
@@ -116,15 +121,18 @@ contract GenericWallet {
     }
     
     function expireTimeOf(address account, address appOwner) public view returns (uint expire) {
-        return applications[appOwner].accountsExpireTime[account];
+        return applications[appOwner].accountsExpirationDate[account];
     }
     
     function grantedAccessOf(address account, address appOwner) public view returns (bool hasGrant) {
         return applications[appOwner].grantedAccounts[account];
     }
     
+    function erc20AddressOf(address appOwner) public view returns (GenericERC20 erc20Address) {
+        return applications[appOwner].appERC20;
+    }
     function receiveDeposit() private {
-        require(msg.value >= 500 finney, "You must send at least 0.5 ether.");
+        require(msg.value == PAYMENT_AMOUNT, "You must send at least 0.5 ether.");
         (bool success, ) = owner.call.value(msg.value)("");
         require(success, "Transfer failed.");
     }
@@ -132,7 +140,7 @@ contract GenericWallet {
     /**
      * @dev Emitted when a new application with a `name` is create by a owner {appOwner}
      */
-    event ApplicationCreated(address indexed appOwner, string name);
+    event ApplicationCreated(address indexed appOwner, string name, GenericERC20 appERC20);
     
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -140,6 +148,6 @@ contract GenericWallet {
      *
      * Note that `value` may be zero.
      */
-    event Transfer(address indexed from, address indexed to, uint256 value, address indexed appOwner);
+    event Privilege(address indexed account,string privilege, uint expirationDate);
 
 }

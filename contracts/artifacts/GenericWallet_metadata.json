@@ -25,6 +25,12 @@
 						"internalType": "string",
 						"name": "name",
 						"type": "string"
+					},
+					{
+						"indexed": false,
+						"internalType": "contract GenericERC20",
+						"name": "appERC20",
+						"type": "address"
 					}
 				],
 				"name": "ApplicationCreated",
@@ -36,29 +42,23 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "from",
-						"type": "address"
-					},
-					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "to",
+						"name": "account",
 						"type": "address"
 					},
 					{
 						"indexed": false,
-						"internalType": "uint256",
-						"name": "value",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "privilege",
+						"type": "string"
 					},
 					{
-						"indexed": true,
-						"internalType": "address",
-						"name": "appOwner",
-						"type": "address"
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "expirationDate",
+						"type": "uint256"
 					}
 				],
-				"name": "Transfer",
+				"name": "Privilege",
 				"type": "event"
 			},
 			{
@@ -110,6 +110,27 @@
 				"outputs": [],
 				"payable": false,
 				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					}
+				],
+				"name": "erc20AddressOf",
+				"outputs": [
+					{
+						"internalType": "contract GenericERC20",
+						"name": "erc20Address",
+						"type": "address"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
 				"type": "function"
 			},
 			{
@@ -385,10 +406,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0xbfce0bdb88c23a4ed7991c4c88dddb51aaaf99c70d456e77cdbfccedfdf04cea",
+			"keccak256": "0xb03bd5b00ed78c80597b4fd36ea932912d1467303087c3cef3473d94662b1cab",
 			"urls": [
-				"bzz-raw://de1ff0aabf8fe835f661baa913b1bf78bed95ff2165f09226a91f3181c6d27b1",
-				"dweb:/ipfs/QmPsYK4MZMcbSdDzZE1byaR8uEdAupaud62x2CJNerNsRs"
+				"bzz-raw://c7d9d7fbb9501152323dddd9e841750df81e27720a7b4535bde026dfbc383832",
+				"dweb:/ipfs/QmaUQ8DmjRTfTe2iEiSrfX7FY7v4JSXmJBtENTB4V9iCJr"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {
