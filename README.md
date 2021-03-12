@@ -1,10 +1,11 @@
 # GenericWallet
-### _Generic wallet management created in the Ethereum blockchain allowing any application to use it._
+### _The Generic wallet management was created in the Ethereum blockchain allowing any application to use it._
 
 You can see the GenericWallet contract on
 
 raspennet: www.XYZ.com and 
 mainnet: www.xyz.com.
+
 ## The problem
 Companies put a lot of time and effort to create trustable wallet management for their applications.
 
@@ -18,9 +19,11 @@ Blockchain solves these problems for us by creating a trustable environment wher
 Rather than focusing on the wallet management problem, companies can focus on their reports and usage.
 
 ## How GenericWallet works
+GenericWallet allows anyone to create wallet management for their application. Every application creates an ERC20 contract where only granted accounts can manipulate it.
 
-## Getting Started
-todo
+Only the owner can grant and/or revoke accounts. Every granted account must have an expiration date attached to it.
+
+Every granted account can call the GenericWallet function almost the same as it is done with the ERC20 contract. The difference is you always must pass the `ownerAddress` parameter as well. That's because an account can be granted to N applications.
 
 ## Usage
 
@@ -28,43 +31,48 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 
 #### Administration
 
-* `newApplication(string name, string description,         bool grantAccessToOwner, uint expireGrantAccess) payable`
-    * Description: Create an application for the address sender. Only one application can created by address. As the sender will be the owner of its application, the sender can or cannot have grant access to manage the application (create transaction, mint, burn ...) or just be the application administrator without grant access. You just need to set `grantAccessToOwner` to enable/disable. If you set it to `true`, you must send a valid timestamp on `expireGrantAccess` to when this grant will expire.
-    * Payable: The sender must send 0.5 ether or more to create an application. That's the only payable function in the GenericWallet.
+* `newApplication(string name, string description,         bool grantAccessToOwner, uint expirationDate) payable`
+    * Description: Create an application for the address sender. Only one application can created by address. As the sender will be the owner of this application, the sender can or cannot have grant access to manage the application (create transaction, mint, burn ...), you just need to set `grantAccessToOwner` to enable/disable it. If you set it to `true`, you must send a valid timestamp on `expirationDate` to when this grant will expire.
+    * Payable: The sender must send 0.5 ether to create an application. That's the only payable function in the GenericWallet.
+    * Emits an ApplicationCreated event.
     * Requirements: 
-        * 0.5 ether (or more).
-        * `name` must be non-empty string (`description` can be empty string)
-* `grantAccess(address account, uint expireGrantAccess) public onlyApplicationOwner`
-    * Description: Grant access to an account for a temporary time to manage the application. the temporary time (`expireGrantAccess`) can be set to any future moment.
+        * 0.5 ether.
+        * `name` must be a non-empty string (`description` can be empty string)
+
+* `grantAccess(address account, uint expirationDate) public onlyApplicationOwner`
+    * Description: Grant access to an account for a temporary time to manage the application. the temporary time (`expirationDate`) can be set to any future moment.
+    * Emits an Privilege event.
     * Requirements:
-        *   `expireGrantAccess` must be a future timestamp.
-        *   This function must be called by an application owner.
+        *   `expirationDate` must be a future timestamp.
+        *   This function must be called by the application owner.
+
 * `revokeAccess(address account) public onlyApplicationOwner`
-    * Description: The application owner can call this function to revoke a granted address.
+    * Description: The application owner can call this function to revoke a granted account.
+    * expirationDate
     * Requirements:
-        * This function must be called by an application owner.
+        * This function must be called by the application owner.
 ---
 
 #### Interacting with your application
 * `mint(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
     * Description: Generate `amount` to the `account` for an application (`ownerAddress`). This function increments the `totalSupply` from your application.
     * Requirements:
-        * `account` must be different then `address(0)`
+        * `account` must be different then the zero address.
         * This function must be called by an account with granted access.
 * `burn(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
     * Description: Remove `amount` to the `account` for an application (`ownerAddress`). This function decreases the total supply from your application.
     * Requirements:
-        * `account` must be different then `address(0)`
+        * `account` must be different then the zero address.
         * This function must be called by an account with granted access.
 * `transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
     * Description: Transfer `amount` from `sender` to `recipient` for an application (`ownerAddress`).
     * Requirements:
-        * Both `sender` and `recipient` must be different from `address(0)`.
+        * Both `sender` and `recipient` must be different from the zero address.
         * This function must be called by an account with granted access.
 * `transferBulk( address[] memory senders, address[] memory recipients, uint256[] memory amounts, address ownerAddress) public  onlyGrantedAccounts`
     * Description: Create 1 to 126 (inclusive) transactions in one request. Be aware that you can pay an expensive gas transaction with it.
     * Requirements:
-        * Every address on `senders` and on `recipients` must be different from `address(0)`.
+        * Every address on `senders` and on `recipients` must be different from the zero address.
         * The size of `senders`, `recipients`, and `amounts` must be the same.
         * the size of `senders`, `recipients`, and `amounts` must be lower then 127;
 * `balanceOf(address account, address ownerAddress) public view returns (uint256 balance) `
@@ -80,16 +88,13 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 ---
 
 ### Events
+Every application has an ERC20 contract that emits the usual events..
 
-* `ApplicationCreated(address indexed ownerAddress, string name)`
-    * Description: Emit when a new application is created with the owner (`ownerAddress`) of the application and the `name` of the application.
-* `Transfer(address indexed from, address indexed to, uint256 value, address indexed application)`
-    * Description: Almost equal to the ERC20 Transaction. This Transaction event emits every new transaction with the sender (`from`), the recipient (`to`), the `value`, and an additional parameter to know the application (`ownerAddress`).
+* `ApplicationCreated(address indexed ownerAddress, string name, GenericERC20 appERC20)`
+    * Description: Emit when a new application is created with the owner (`ownerAddress`) of the application, the `name` of the application, and the ERC20 address of the application.
+* `Privilege(address indexed account,string privilege, address indexed ownerAddress, uint expirationDate)`
+    * Description: Emit when an account receives grant/revoke privilege.
 
 ## TODO
 
 [ ] Create a website
-
-[ ] Create a demo backend
-
-[ ] Update Getting Started
