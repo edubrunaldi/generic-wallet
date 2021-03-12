@@ -188,7 +188,7 @@ contract("GenericWallet", accounts => {
     assert.equal(web3.utils.fromWei(balance, "finney"), 500, "addressOne with wrong balance amount");
   });
 
-  it("Transfer Bulk between 1 sender to 2 recipients should transfer 1 ether to accountZero success", async () => {
+  it("Transfer Bulk between 1 sender to 2 recipients should transfer 1 ether to addressTwo success", async () => {
     const address = await newAddress();
     const addressOne = await newAddress();
     const addressTwo = await newAddress();

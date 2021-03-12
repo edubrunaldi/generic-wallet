@@ -17,7 +17,7 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "owner",
+						"name": "appOwner",
 						"type": "address"
 					},
 					{
@@ -54,7 +54,7 @@
 					{
 						"indexed": true,
 						"internalType": "address",
-						"name": "application",
+						"name": "appOwner",
 						"type": "address"
 					}
 				],
@@ -176,7 +176,7 @@
 				"outputs": [
 					{
 						"internalType": "bool",
-						"name": "",
+						"name": "hasGrant",
 						"type": "bool"
 					}
 				],
@@ -385,10 +385,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0x13fbb7654350e575ca9f87abfac0a6ec8d1b80e82dde9089111442db3305dc83",
+			"keccak256": "0xb5df6b0b2c8222c5affbaa6037f21772d1e97858ad3d8fd9c458ebfddc1efd73",
 			"urls": [
-				"bzz-raw://f14f593d4dc623147e3126448feda91cc61e59301c1f786330721d621b04c4b5",
-				"dweb:/ipfs/QmPqGD3rBu7UB9sxjfkoVrC9GeiFSTnL3VGAbaE9k3ySUV"
+				"bzz-raw://b899be55dd941e99209661f0f9cd2f8f8d9fc3481e99baf80c5abd9cddf70e32",
+				"dweb:/ipfs/QmauQZNwuR5VyRwY7vR1JdtoMAM4cuzV6kkd9RYGNkRKe4"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {

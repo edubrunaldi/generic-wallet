@@ -119,7 +119,7 @@ contract GenericWallet {
         return applications[appOwner].accountsExpireTime[account];
     }
     
-    function grantedAccessOf(address account, address appOwner) public view returns (bool) {
+    function grantedAccessOf(address account, address appOwner) public view returns (bool hasGrant) {
         return applications[appOwner].grantedAccounts[account];
     }
     
@@ -132,7 +132,7 @@ contract GenericWallet {
     /**
      * @dev Emitted when a new application with a `name` is create by a `owner`
      */
-    event ApplicationCreated(address indexed owner, string name);
+    event ApplicationCreated(address indexed appOwner, string name);
     
     /**
      * @dev Emitted when `value` tokens are moved from one account (`from`) to
@@ -140,6 +140,6 @@ contract GenericWallet {
      *
      * Note that `value` may be zero.
      */
-    event Transfer(address indexed from, address indexed to, uint256 value, address indexed application);
+    event Transfer(address indexed from, address indexed to, uint256 value, address indexed appOwner);
 
 }
