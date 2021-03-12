@@ -2,7 +2,14 @@ pragma solidity >=0.4.21 <0.7.0;
 
 import './GenericERC20.sol';
 
-
+/**
+ * This contract manage generic wallet applications. Every new application creates a new ERC20 Token.
+ * The owner can grant/revoke acccount to manage his application.
+ * The owner and/or granted accounts can manage these tokens by 
+ *   creating new token (mint)
+ *   remove token (burn)
+ *   tranfer token between accounts (transfer / transferBulk)
+ */
 contract GenericWallet {
     address payable private owner;
     
@@ -37,11 +44,25 @@ contract GenericWallet {
         require(applications[appOwner].accountsExpirationDate[msg.sender] >= now,"Expired access account.");
         _;
     }
-    
+
+    /**
+     * Create a new application for the sender address
+     * 
+     * @param name The name of the new application
+     * @param description The description of the new application
+     * @param grantAccessToOwner Indicates if the owner (sender) want to have grant access to manage his application
+     * @param expirationDate Timestamp when the owner grant access will expire
+     * 
+     * Emits an {ApplicationCreated} with appERC20 contaning the new ERC20 for this application
+     * 
+     * Requirements:
+     *  This function require an address without an application in this contract
+     *  parameter name must be non-empty string
+     */
     function newApplication(
         string memory name,
         string memory description,
-        bool grantAccessToOwner, uint expireGrantAccess
+        bool grantAccessToOwner, uint expirationDate
     ) 
         public payable
     {
@@ -50,40 +71,106 @@ contract GenericWallet {
 
         applications[msg.sender] = Application(name, description, new GenericERC20());
         if (grantAccessToOwner) {
-            grantAccess(msg.sender, expireGrantAccess);
+            grantAccess(msg.sender, expirationDate);
         }
         receiveDeposit();
         emit ApplicationCreated(msg.sender, name, applications[msg.sender].appERC20);
     }
     
-    
-    function grantAccess(address account, uint expireGrantAccess) public onlyApplicationOwner {
-        require(expireGrantAccess > now, "expireGrantAccess value is lower than now");
+    /**
+     * Grant access for an account until  expireGrantAccessDate.
+     * Can be used to update the expireGrantAccessDate.
+     * 
+     * @param account Address to grant access for an account.
+     * @param expirationDate Timestamp to when this gant will expire.
+     *
+     * Emits a {Privilege} event.
+     * 
+     * Requirements:
+     *   expirationDate must be greater than now
+     *   only the application owner address can call this function
+     */
+    function grantAccess(address account, uint expirationDate) public onlyApplicationOwner {
+        require(expirationDate > now, "expireGrantAccess value is lower than now");
 
         applications[msg.sender].grantedAccounts[account] = true;
-        applications[msg.sender].accountsExpirationDate[account] = expireGrantAccess;
-        emit Privilege(account, GRANTED, applications[msg.sender].accountsExpirationDate[account]);
+        applications[msg.sender].accountsExpirationDate[account] = expirationDate;
+        emit Privilege(account, GRANTED, msg.sender, applications[msg.sender].accountsExpirationDate[account]);
     }
     
+    /**
+     * Revoke access for an `account`.
+     * 
+     * @param account Address to revoke access for an account.
+     *
+     * Emits a {Privilege} event.
+     * 
+     * Requirements:
+     *   only the application owner address can call this function
+     */
     function revokeAccess(address account) public onlyApplicationOwner {
         applications[msg.sender].grantedAccounts[account] = false;
         applications[msg.sender].accountsExpirationDate[account] = 0;
-        emit Privilege(account, REVOKED, applications[msg.sender].accountsExpirationDate[account]);
+        emit Privilege(account, REVOKED, msg.sender, applications[msg.sender].accountsExpirationDate[account]);
     }
     
-    
+    /** 
+     * @dev Creates `amount` tokens and assigns them to `account`, increasing
+     * the total supply for an especific application `appOwner`.
+     *
+     * Emits a {Tansfer} event on ERC20 contract for `appOwner` application with `from` set to the zero address.
+     * 
+     * Requirements
+     * - `account` cannot be the zero address.
+     * -  only accounts with grant access can call this function
+     */
     function mint(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.mint(account, amount);
     }
     
+    /**
+     * @dev Destroys `amount` tokens from `account`, reducing the
+     * total supply.
+     *
+     * Emits a {Transfer} event on ERC20 contract for `appOwner` application with `to` set to the zero address.
+     *
+     * Requirements
+     *
+     * - `account` cannot be the zero address.
+     * - `account` must have at least `amount` tokens.
+     * -  only accounts with grant access can call this function
+     */
     function burn(address account, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.burn(account, amount);
     }
-    
+
+     /**
+     * @dev Moves tokens `amount` from `sender` to `recipient`.
+     * 
+     * Emits a {Transfer} event.
+     *
+     * Requirements:
+     *
+     * - `sender` cannot be the zero address.
+     * - `recipient` cannot be the zero address.
+     * - `sender` must have a balance of at least `amount`.
+     */
     function transfer(address sender, address recipient, uint256 amount, address appOwner) public onlyGrantedAccounts(appOwner) {
         applications[appOwner].appERC20.transfer(sender, recipient, amount);
     }
     
+    
+    /**
+     * @dev Moves tokens `amount` from `sender` to `recipient`.
+     * 
+     * Emits a {Transfer} event for each transfer created.
+     *
+     * Requirements:
+     *
+     * - all address from `senders` cannot be the zero address.
+     * - all address from `recipients` cannot be the zero address.
+     * - all address from `senders` must have a balance of at least respective amount from `amounts` .
+     */
     function transferBulk(
         address[] memory senders,
         address[] memory recipients,
@@ -112,27 +199,43 @@ contract GenericWallet {
         }
     }
     
+    /**
+     * @dev Returns the amount of tokens owned by `account` for application `appOwner`.
+     */ 
     function balanceOf(address account, address appOwner) public view returns (uint256 balance) {
         return applications[appOwner].appERC20.balanceOf(account);
     }
     
+    /**
+     * @dev Returns the total supply from a application `appOwner`
+     */
     function totalSupply(address appOwner) public view returns (uint256 total)  { 
         return applications[appOwner].appERC20.totalSupply();
     }
     
+    /**
+     * @dev Returns the expirateDate of an account from an application `appOwner`
+     */
     function expireTimeOf(address account, address appOwner) public view returns (uint expire) {
         return applications[appOwner].accountsExpirationDate[account];
     }
     
+    /**
+     * @dev Returns if an account is grated for an application `appOwner`
+     */ 
     function grantedAccessOf(address account, address appOwner) public view returns (bool hasGrant) {
         return applications[appOwner].grantedAccounts[account];
     }
     
+    /**
+     * @dev return the ERC20 address of an application `appOwner`
+     */ 
     function erc20AddressOf(address appOwner) public view returns (GenericERC20 erc20Address) {
         return applications[appOwner].appERC20;
     }
+
     function receiveDeposit() private {
-        require(msg.value == PAYMENT_AMOUNT, "You must send at least 0.5 ether.");
+        require(msg.value == PAYMENT_AMOUNT, "You must send 0.5 ether.");
         (bool success, ) = owner.call.value(msg.value)("");
         require(success, "Transfer failed.");
     }
@@ -143,11 +246,8 @@ contract GenericWallet {
     event ApplicationCreated(address indexed appOwner, string name, GenericERC20 appERC20);
     
     /**
-     * @dev Emitted when `value` tokens are moved from one account (`from`) to
-     * another (`to`) from a especific application {appOwner}.
-     *
-     * Note that `value` may be zero.
+     * @dev Emitted when an account is grant or revoke in an application.
      */
-    event Privilege(address indexed account,string privilege, uint expirationDate);
+    event Privilege(address indexed account,string privilege, address indexed appOwner, uint expirationDate);
 
 }

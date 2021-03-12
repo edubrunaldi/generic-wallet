@@ -52,6 +52,12 @@
 						"type": "string"
 					},
 					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "appOwner",
+						"type": "address"
+					},
+					{
 						"indexed": false,
 						"internalType": "uint256",
 						"name": "expirationDate",
@@ -169,7 +175,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "expireGrantAccess",
+						"name": "expirationDate",
 						"type": "uint256"
 					}
 				],
@@ -250,7 +256,7 @@
 					},
 					{
 						"internalType": "uint256",
-						"name": "expireGrantAccess",
+						"name": "expirationDate",
 						"type": "uint256"
 					}
 				],
@@ -358,10 +364,68 @@
 			}
 		],
 		"devdoc": {
-			"methods": {}
+			"methods": {
+				"balanceOf(address,address)": {
+					"details": "Returns the amount of tokens owned by `account` for application `appOwner`."
+				},
+				"burn(address,uint256,address)": {
+					"details": "Destroys `amount` tokens from `account`, reducing the total supply.     * Emits a {Transfer} event on ERC20 contract for `appOwner` application with `to` set to the zero address.     * Requirements     * - `account` cannot be the zero address. - `account` must have at least `amount` tokens. -  only accounts with grant access can call this function"
+				},
+				"erc20AddressOf(address)": {
+					"details": "return the ERC20 address of an application `appOwner`"
+				},
+				"expireTimeOf(address,address)": {
+					"details": "Returns the expirateDate of an account from an application `appOwner`"
+				},
+				"grantAccess(address,uint256)": {
+					"params": {
+						"account": "Address to grant access for an account.",
+						"expirationDate": "Timestamp to when this gant will expire.     * Emits a {Privilege} event.      * Requirements:  expirationDate must be greater than now  only the application owner address can call this function"
+					}
+				},
+				"grantedAccessOf(address,address)": {
+					"details": "Returns if an account is grated for an application `appOwner`"
+				},
+				"mint(address,uint256,address)": {
+					"details": "Creates `amount` tokens and assigns them to `account`, increasing the total supply for an especific application `appOwner`.     * Emits a {Tansfer} event on ERC20 contract for `appOwner` application with `from` set to the zero address.      * Requirements - `account` cannot be the zero address. -  only accounts with grant access can call this function"
+				},
+				"newApplication(string,string,bool,uint256)": {
+					"params": {
+						"description": "The description of the new application",
+						"expirationDate": "Timestamp when the owner grant access will expire      * Emits an {ApplicationCreated} with appERC20 contaning the new ERC20 for this application      * Requirements: This function require an address without an application in this contract parameter name must be non-empty string",
+						"grantAccessToOwner": "Indicates if the owner (sender) want to have grant access to manage his application",
+						"name": "The name of the new application"
+					}
+				},
+				"revokeAccess(address)": {
+					"params": {
+						"account": "Address to revoke access for an account.     * Emits a {Privilege} event.      * Requirements:  only the application owner address can call this function"
+					}
+				},
+				"totalSupply(address)": {
+					"details": "Returns the total supply from a application `appOwner`"
+				},
+				"transfer(address,address,uint256,address)": {
+					"details": "Moves tokens `amount` from `sender` to `recipient`.      * Emits a {Transfer} event.     * Requirements:     * - `sender` cannot be the zero address. - `recipient` cannot be the zero address. - `sender` must have a balance of at least `amount`."
+				},
+				"transferBulk(address[],address[],uint256[],address)": {
+					"details": "Moves tokens `amount` from `sender` to `recipient`.      * Emits a {Transfer} event for each transfer created.     * Requirements:     * - all address from `senders` cannot be the zero address. - all address from `recipients` cannot be the zero address. - all address from `senders` must have a balance of at least respective amount from `amounts` ."
+				}
+			}
 		},
 		"userdoc": {
-			"methods": {}
+			"methods": {
+				"grantAccess(address,uint256)": {
+					"notice": "Grant access for an account until  expireGrantAccessDate. Can be used to update the expireGrantAccessDate. "
+				},
+				"newApplication(string,string,bool,uint256)": {
+					"notice": "Create a new application for the sender address "
+				},
+				"revokeAccess(address)": {
+					"notice": "Revoke access for an `account`. "
+				}
+			},
+			"notice": "This contract manage generic wallet applications. Every new application creates a new ERC20 Token. The owner can grant/revoke acccount to manage his application. The owner and/or granted accounts can manage these tokens by   creating new token (mint)  remove token (burn)  tranfer token between accounts (transfer / transferBulk)"
 		}
 	},
 	"settings": {
@@ -406,10 +470,10 @@
 			]
 		},
 		"localhost/contracts/GenereicWallet.sol": {
-			"keccak256": "0xb03bd5b00ed78c80597b4fd36ea932912d1467303087c3cef3473d94662b1cab",
+			"keccak256": "0x4a1edba08d7ef73f382aaea544ac3cded139662be74b60d672b66f9aa21ee7cb",
 			"urls": [
-				"bzz-raw://c7d9d7fbb9501152323dddd9e841750df81e27720a7b4535bde026dfbc383832",
-				"dweb:/ipfs/QmaUQ8DmjRTfTe2iEiSrfX7FY7v4JSXmJBtENTB4V9iCJr"
+				"bzz-raw://cba1fbb30db31d706fe38b3986313ed572bc8939388e1c92378fa126cbbac4b9",
+				"dweb:/ipfs/QmUqt5BwR1wk1hgvNuc2T4CdsuHCeiJ1e1NQk4Fb6sEJX7"
 			]
 		},
 		"localhost/contracts/GenericERC20.sol": {
