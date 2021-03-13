@@ -1,5 +1,5 @@
 # GenericWallet
-### _The Generic wallet management was created in the Ethereum blockchain allowing any application to use it._
+### _Generic wallet management that was created in the Ethereum blockchain allowing any application to use it._
 
 You can see the GenericWallet contract on Ropsten Testnet Network : [0x9CfA6313047de18d0d002Bb49D15Fa563a867034](https://ropsten.etherscan.io/address/0x9CfA6313047de18d0d002Bb49D15Fa563a867034)
 
