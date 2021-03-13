@@ -28,28 +28,28 @@ contract("GenericWallet", accounts => {
   }
 
   it("Should create a new Application.", async () => {
-    const result = await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountZero });
+    const result = await gw.newApplication("test", true, 95617584000000, { value: halfEther, from: accountZero });
     assert.equal(result.logs[1].event, "ApplicationCreated", "The log event create was not an  ApplicationCreated");
   });
 
   it("Contract owner should receive 0.5 ether when a new application is created", async () => {
     const initialAccountZero = await web3.eth.getBalance(accountZero);
-    await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountTwo });
+    await gw.newApplication("test", true, 95617584000000, { value: halfEther, from: accountTwo });
     const finalAccountZero = await web3.eth.getBalance(accountZero);
     assert.equal(initialAccountZero, finalAccountZero - halfEther, "balance is different than expected");
   });
 
   it("Application owner must have granted access", async () => {
-    await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountThree });
+    await gw.newApplication("test", true, 95617584000000, { value: halfEther, from: accountThree });
     const grantedAccess = await gw.grantedAccessOf(accountThree, accountThree);
     assert.equal(grantedAccess, true, "Owner account without granted access");
   });
 
   it("Address with an application must fail to create a new application", async () => {
-    await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountOne });
+    await gw.newApplication("test", true, 95617584000000, { value: halfEther, from: accountOne });
     let reason = "";
     try {
-      await gw.newApplication("test", "", true, 95617584000000, { value: halfEther, from: accountOne });
+      await gw.newApplication("test", true, 95617584000000, { value: halfEther, from: accountOne });
     } catch (error) {
       reason = error.reason;
     }
