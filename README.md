@@ -63,7 +63,7 @@ Below, there are three lists. The first is a list of functions for application a
     * Description: Remove `amount` to the `account` for the application (`ownerAddress`). This function decreases the total supply from your application.
     * Emits a Transaction event.
     * Requirements:
-        * `account` must be different then the zero address.
+        * `account` must be different than the zero address.
         * This function must be called by an account with granted access.
 
 * `transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
@@ -78,7 +78,7 @@ Below, there are three lists. The first is a list of functions for application a
     * Requirements:
         * Every address on `senders` and on `recipients` must be different from the zero address.
         * The size of `senders`, `recipients`, and `amounts` must be the same.
-        * the size of `senders`, `recipients`, and `amounts` must be lower then 127;
+        * the size of `senders`, `recipients`, and `amounts` must be lower than 127;
 
 * `balanceOf(address account, address ownerAddress) public view returns (uint256 balance) `
     * Description: Return the balance of and `account` from the application (`ownerAddress`)
@@ -98,7 +98,7 @@ Below, there are three lists. The first is a list of functions for application a
 * `Privilege(address indexed account,string privilege, address indexed ownerAddress, uint expirationDate)`
     * Description: Emitted when an account receives grant/revoke privilege.
 * `event Transfer(address indexed from, address indexed to, uint256 value, address indexed ownerAddress)`
-    * Description: Emitted when `value` tokens are moved from one account (`from`) to another (`to`) in an specific application (`ownerAddress`).
+    * Description: Emitted when `value` tokens are moved from one account (`from`) to another (`to`) in a specific application (`ownerAddress`).
 
 ## TODO
 
