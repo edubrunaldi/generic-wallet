@@ -22,6 +22,10 @@ Only the owner can grant or revoke an account's access permission. Every account
 
 Every account with access permission can call the GenericWallet function almost the same as it is done with the ERC20 contract. The difference is you always must send the `ownerAddress` parameter as well. That's because an account can be granted to N applications.
 
+
+
+![GenericWallet Example](images/GenericWallet.png)
+
 ## Usage
 
 Below, there are three lists. The first is a list of functions for application administration, followed by a list of functions that interact with the application, and the last is a list of events from GenericWallet.
