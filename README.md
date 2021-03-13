@@ -1,5 +1,5 @@
 # GenericWallet
-### _Generic wallet management that was created in the Ethereum blockchain allowing any application to use it._
+### _GenericWallet was created in the Ethereum blockchain allowing any application to use it._
 
 You can see the GenericWallet contract on Ropsten Testnet Network : [0x9CfA6313047de18d0d002Bb49D15Fa563a867034](https://ropsten.etherscan.io/address/0x9CfA6313047de18d0d002Bb49D15Fa563a867034)
 
@@ -8,23 +8,23 @@ Companies put a lot of time and effort to create trustable wallet management for
 
     
 - Creating atomic functions to rollback in case any error occurs during transactions
-- Frequently transactions summarize to audit their wallet
-- With a tight deadline, companies focus on results rather than good practices, thus adding business rules to the wallet management
+- Frequently summarizing transactions to audit their wallet
+- With tight deadlines, companies focus on the results rather than good practices, thus adding business rules to the wallet management
 
 ## The solution
-Blockchain solves these problems for us by creating a trustable environment where any transactions are atomic, public, anonymous, and can be verified using Ethereum blockchain explorer or any library that interacts with Ethereum.
-Rather than focusing on the wallet management problem, companies can focus on their reports and usage.
+Blockchain solves these problems for us by creating a trustable environment where transactions are atomic, public, anonymous, and can be verified using Ethereum blockchain explorer or any library that interacts with Ethereum.
+Instead of focusing on the wallet management problem, companies can focus on their reports and usage.
 
 ## How GenericWallet works
-GenericWallet allows anyone to create wallet management for their application. Every application creates an ERC20 contract where only granted accounts can manipulate it.
+GenericWallet allows anyone to create wallet management for their application. Every application creates an ERC20 contract where only accounts with access permission can manipulate it.
 
-Only the owner can grant and/or revoke accounts. Every granted account must have an expiration date attached to it.
+Only the owner can grant or revoke an account's access permission. Every account with granted access must have an expiration date attached to it.
 
-Every granted account can call the GenericWallet function almost the same as it is done with the ERC20 contract. The difference is you always must send the `ownerAddress` parameter as well. That's because an account can be granted to N applications.
+Every account with access permission can call the GenericWallet function almost the same as it is done with the ERC20 contract. The difference is you always must send the `ownerAddress` parameter as well. That's because an account can be granted to N applications.
 
 ## Usage
 
-Bellow, there are three lists. The first one is a list of functions for application administration, followed by a list of functions that interact with the application, and the last one is a list of events from GenericWallet.
+Below, there are three lists. The first is a list of functions for application administration, followed by a list of functions that interact with the application, and the last is a list of events from GenericWallet.
 
 #### Administration
 
@@ -53,21 +53,21 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 
 #### Interacting with your application
 * `mint(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
-    * Description: Generate `amount` to the `account` for an application (`ownerAddress`). This function increments the total supply from your application.
+    * Description: Generate `amount` to the `account` for the application (`ownerAddress`). This function increments the total supply from your application.
     * Emits a Transaction event.
     * Requirements:
         * `account` must be different then the zero address.
         * This function must be called by an account with granted access.
 
 * `burn(address account, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
-    * Description: Remove `amount` to the `account` for an application (`ownerAddress`). This function decreases the total supply from your application.
+    * Description: Remove `amount` to the `account` for the application (`ownerAddress`). This function decreases the total supply from your application.
     * Emits a Transaction event.
     * Requirements:
         * `account` must be different then the zero address.
         * This function must be called by an account with granted access.
 
 * `transfer(address sender, address recipient, uint256 amount, address ownerAddress) public onlyGrantedAccounts`
-    * Description: Transfer `amount` from `sender` to `recipient` for an application (`ownerAddress`).
+    * Description: Transfer `amount` from `sender` to `recipient` for the application (`ownerAddress`).
     * Emits a Transaction event.
     * Requirements:
         * Both `sender` and `recipient` must be different from the zero address.
@@ -81,13 +81,13 @@ Bellow, there are three lists. The first one is a list of functions for applicat
         * the size of `senders`, `recipients`, and `amounts` must be lower then 127;
 
 * `balanceOf(address account, address ownerAddress) public view returns (uint256 balance) `
-    * Description: Return the balance of and `account` from an application (`ownerAddress`)
+    * Description: Return the balance of and `account` from the application (`ownerAddress`)
 
 * `totalSupply(address ownerAddress) public view returns (uint256 total)`
-    * Description: Return the total of supply from an application (`ownerAddress`)
+    * Description: Return the total of supply from the application (`ownerAddress`)
 
 * `grantedAccessOf(address account, address ownerAddress) public view returns (bool)`
-    * Description: Return if an account is granted for an application (`ownerAddress`)
+    * Description: Return if an account is granted for the application (`ownerAddress`)
     grantedAccessOf(address account, address ownerAddress) public view returns (bool)
 ---
 
@@ -98,7 +98,7 @@ Bellow, there are three lists. The first one is a list of functions for applicat
 * `Privilege(address indexed account,string privilege, address indexed ownerAddress, uint expirationDate)`
     * Description: Emitted when an account receives grant/revoke privilege.
 * `event Transfer(address indexed from, address indexed to, uint256 value, address indexed ownerAddress)`
-    * Description: Emitted when `value` tokens are moved from one account (`from`) to another (`to`) in an especific application (`ownerAddress`).
+    * Description: Emitted when `value` tokens are moved from one account (`from`) to another (`to`) in an specific application (`ownerAddress`).
 
 ## TODO
 
